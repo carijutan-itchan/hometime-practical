@@ -47,3 +47,5 @@ group :development do
   gem 'rspec-rails', '~> 6.0.0'
 end
 
+
+gem "byebug", "~> 11.1", :groups => [:development, :test]
