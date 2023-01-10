@@ -181,7 +181,7 @@ RSpec.describe Reservation, type: :model do
       }
       let(:code) { '2023ABCD' }
 
-      it "is not valid contact" do
+      it "is not valid code" do
         expect(reservation).to eq(false)
       end
     end
@@ -194,6 +194,5 @@ RSpec.describe Reservation, type: :model do
         expect(subject).not_to be_valid
       end
     end  
-
   end
 end
