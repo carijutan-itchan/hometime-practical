@@ -2,8 +2,9 @@ class Reservation < ApplicationRecord
 
   belongs_to :guest
 
+  before_validation :set_default_value
   validates :code, :status, :currency, :total_amount, :adults, :end_date, :start_date,
-            :guest, :nights, presence: true
+            :guest, :nights, :security_price, :payout_price, presence: true
   validates :code, uniqueness: true
   validates :total_amount, numericality: { greater_than_or_equal_to: 0 }
   validate :duration_validation
@@ -18,7 +19,7 @@ class Reservation < ApplicationRecord
   end
 
   def number_of_guest_validation
-    total_guests = adults + children + infants
+    total_guests = (adults + children + infants)
     if total_guests != guests
       errors.add(:guest, "Guest number should be equal to total number of adults to infants")
     end
@@ -36,6 +37,12 @@ class Reservation < ApplicationRecord
     if total_price != total_amount
       errors.add(:total_amount, "Total amount is wrong please calculate it again")
     end
+  end
+
+  def set_default_value
+    self.adults = 0 if adults.blank?
+    self.start_date = Date.today if start_date.blank?
+    self.end_date = Date.today if end_date.blank?
   end
 
 end

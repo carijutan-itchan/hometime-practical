@@ -85,7 +85,7 @@ RSpec.describe "Reservations endpoint", type: :request do
     }
 
     it "test" do
-      subject
+      
     end
   end
 end

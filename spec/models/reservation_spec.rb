@@ -12,7 +12,12 @@ RSpec.describe Reservation, type: :model do
                        total_amount: total_amount,
                        start_date: start_date,
                        end_date: end_date,
-                       guest_id: guest.id)
+                       guest_id: guest.id,
+                       security_price: security_price,
+                       payout_price: payout_price,
+                       nights: nights,
+                       guests: guests
+                      )
   end
 
   let(:guest) {
@@ -25,9 +30,13 @@ RSpec.describe Reservation, type: :model do
   let(:code) { '2023ABCD' }
   let(:status) { 'pending' }
   let(:currency) { 'AED' }
-  let(:adults) { 0 }
+  let(:adults) { 2 }
   let(:children) { 0 }
   let(:infants) { 0 }
+  let(:nights) { 5 }
+  let(:guests) { 2 }
+  let(:security_price) { 50 }
+  let(:payout_price) { 50 }
   let(:total_amount) { 100.00 }
   let(:start_date) { '2023-01-5' }
   let(:end_date) { '2023-01-10' }
@@ -158,7 +167,7 @@ RSpec.describe Reservation, type: :model do
     end
 
     context "total_amount with greater than zero value" do
-      let(:total_amount) { 2 }
+      let(:total_amount) { 100 }
 
       it "should not valid" do
         expect(subject).to be_valid
@@ -170,14 +179,20 @@ RSpec.describe Reservation, type: :model do
       before { subject }
       
       let(:reservation) {
-        Reservation.create(code: code,
-                       status: status,
-                       currency: currency,
-                       adults: adults,
-                       children: children,
-                       infants: infants,
-                       total_amount: total_amount,
-                       guest_id: guest.id).save
+            Reservation.create(code: code,
+              status: status,
+              currency: currency,
+              adults: adults,
+              children: children,
+              infants: infants,
+              total_amount: total_amount,
+              start_date: start_date,
+              end_date: end_date,
+              guest_id: guest.id,
+              security_price: security_price,
+              payout_price: payout_price,
+              nights: nights,
+              guests: guests).save
       }
       let(:code) { '2023ABCD' }
 
