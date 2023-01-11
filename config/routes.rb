@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  post 'reserve', to: 'reservation#reserve'
+  resources :reservations, only: %i(create)
 end

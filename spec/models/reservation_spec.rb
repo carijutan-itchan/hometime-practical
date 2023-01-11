@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Reservation, type: :model do
 
-  subject {
+  subject do
     Reservation.create(code: code,
                        status: status,
                        currency: currency,
@@ -13,7 +13,7 @@ RSpec.describe Reservation, type: :model do
                        start_date: start_date,
                        end_date: end_date,
                        guest_id: guest.id)
-  }
+  end
 
   let(:guest) {
     Guest.create(first_name: 'Emman',
