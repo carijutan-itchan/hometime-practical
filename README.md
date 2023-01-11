@@ -1,6 +1,6 @@
-#Hometime Practical
+# Hometime Practical
 
-##Project Setup
+## Project Setup
 
 ### Git Repo Cloning and Setup
 
