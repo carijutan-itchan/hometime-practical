@@ -6,14 +6,17 @@ class UpdateReservationService
 
   def execute   
     ActiveRecord::Base.transaction do
-      guest = @reservation.guest
-      guest.attributes = guest_params
-      byebug
-      if guest.save!
-        reservation = guest.reservations.find(@reservation.id)
-        reservation.attributes = host_params
-        reservation.save!
-      end     
+      if check_guest
+        guest = check_guest
+      else
+        guest = @reservation.guest
+        guest.attributes = guest_params
+        guest.save!
+      end
+
+      reservation = guest.reservations.find(@reservation.id)
+      reservation.attributes = host_params
+      reservation.save!   
     end
 
     @reservation.reload
@@ -61,15 +64,24 @@ class UpdateReservationService
       {
         first_name: @params['guest']['first_name'], 
         last_name: @params['guest']['last_name'], 
+        email: @params['guest']['email'], 
         contact: @params['guest']['phone']
       }
     else
       {
         first_name: @params['guest_first_name'], 
         last_name: @params['guest_last_name'], 
+        email: @params['guest_email'], 
         contact: @params['guest_phone_numbers'],
       }
     end
+  end
+
+  def check_guest
+    guest = Guest.find_by(email: guest_params[:email])
+    return false if guest.nil?
+
+    guest
   end
 
   attr_reader :params

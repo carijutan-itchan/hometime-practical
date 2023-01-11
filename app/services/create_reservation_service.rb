@@ -1,4 +1,5 @@
 class CreateReservationService
+
   def initialize(params:)
     @params = params
     @reservation = {}
@@ -6,13 +7,17 @@ class CreateReservationService
 
   def execute   
     ActiveRecord::Base.transaction do
-      guest = Guest.new guest_params
-      
-      if guest.save!
-        reservation = guest.reservations.new host_params
-        reservation.save!
-        @reservation = reservation
+      byebug
+      if check_guest
+        guest = check_guest
+      else
+        guest = Guest.new guest_params
+        guest.save!
       end
+
+      reservation = guest.reservations.new host_params
+      reservation.save!
+      @reservation = reservation
     end
 
     @reservation
@@ -72,6 +77,13 @@ class CreateReservationService
         contact: @params['guest_phone_numbers'],
       }
     end
+  end
+
+  def check_guest
+    guest = Guest.find_by(email: guest_params[:email])
+    return false if guest.nil?
+
+    guest
   end
 
   attr_reader :params
