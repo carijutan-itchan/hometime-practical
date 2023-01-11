@@ -10,7 +10,6 @@ module ReservationHelper
   end
 
   def check_reservation
-
     code = if params["reservation_code"].nil?
             params["reservation"]["code"]
           else

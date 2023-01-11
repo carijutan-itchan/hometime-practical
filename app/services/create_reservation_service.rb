@@ -31,11 +31,11 @@ class CreateReservationService
         infants: @params["guest_details"]["number_of_infants"],
         status: @params['status_type'],
         currency: @params['host_currency'],
-        # payout_price: @params['expected_payout_amount'], 
-        # security_price: @params['listing_security_price_accurate'], 
+        payout_price: @params['expected_payout_amount'], 
+        security_price: @params['listing_security_price_accurate'], 
         total_amount: @params['total_paid_amount_accurate'], 
-        # nights: @params['nights'], 
-        # guests: @params['number_of_guests'],
+        nights: @params['nights'], 
+        guests: @params['number_of_guests']
       }
     else
       {
@@ -47,11 +47,11 @@ class CreateReservationService
         infants: @params['infants'],
         status: @params['status'],
         currency: @params['currency'],
-        # payout_price:, 
-        # security_price:, 
+        payout_price: @params['payout_price'], 
+        security_price: @params['security_price'],
         total_amount: @params['total_price'], 
-        # nights:, 
-        # guests:,
+        nights: @params['nights'],
+        guests: @params['guests']
       }
     end
   end
