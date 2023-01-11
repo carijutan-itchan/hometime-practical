@@ -1,9 +1,17 @@
 class ReservationsController < ApplicationController
+  include ReservationHelper
+
   before_action :set_params
+  before_action :check_reservation
 
   def create
-    service = ReservationService.new(params: @params)
-    reservation = service.execute
+    if @reservation.nil?
+      create_service = CreateReservationService.new(params: @params)
+      reservation = create_service.execute
+    else
+      update_service = UpdateReservationService.new(params: @params, reservation: @reservation)
+      reservation = update_service.execute
+    end
 
     render json: {
       data: ActiveModelSerializers::SerializableResource.new(reservation, serializer: ReservationsSerializer),
@@ -14,14 +22,6 @@ class ReservationsController < ApplicationController
   end
 
   private
-
-  def set_params
-    @params = if params["reservation_code"].nil?
-                airbnb_params
-              else
-                booking_params
-              end
-  end
 
   def booking_params
     params.permit(:reservation_code, 

@@ -1,19 +1,18 @@
-class ReservationService
-  def initialize(params:)
+class UpdateReservationService
+  def initialize(params:, reservation:)
     @params = params
-    @reservation = {}
+    @reservation = reservation
   end
 
   def execute   
     ActiveRecord::Base.transaction do
-      guest = Guest.new guest_params
-      if guest.save!
-        reservation = guest.reservations.new host_params
-        reservation.save!
-        @reservation = reservation
-      end
+      guest = @reservation.guest
+      if guest.update guest_params
+        reservation = guest.reservations.update host_params
+      end     
     end
 
+    @reservation.reload
     @reservation
   end
 
@@ -22,7 +21,6 @@ class ReservationService
   def host_params
     if @params["reservation_code"].nil?
       {
-        code: @params['code'], 
         start_date: @params['start_date'], 
         end_date: @params['end_date'],
         adults: @params["guest_details"]["number_of_adults"],
@@ -38,7 +36,6 @@ class ReservationService
       }
     else
       {
-        code: @params['reservation_code'], 
         start_date: @params['start_date'], 
         end_date: @params['end_date'],
         adults: @params['adults'],
@@ -60,14 +57,12 @@ class ReservationService
       {
         first_name: @params['guest']['first_name'], 
         last_name: @params['guest']['last_name'], 
-        email: @params['guest']['email'], 
         contact: @params['guest']['phone']
       }
     else
       {
         first_name: @params['guest_first_name'], 
         last_name: @params['guest_last_name'], 
-        email: @params['guest_email'], 
         contact: @params['guest_phone_numbers'],
       }
     end
