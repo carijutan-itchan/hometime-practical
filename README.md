@@ -23,7 +23,11 @@
 5. Test if the app server will boot w/ no issues.
 
    ```bash
-   bin/rails s
+   bin/rails s -p 8080
+   ```
+6. You can test this by using this API (POST METHOD)
+   ```bash
+   localhost:8080/reservations
    ```
    
  ## For testing
