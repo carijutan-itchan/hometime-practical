@@ -7,7 +7,6 @@ class CreateReservationService
 
   def execute   
     ActiveRecord::Base.transaction do
-      byebug
       if check_guest
         guest = check_guest
       else
