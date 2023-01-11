@@ -6,8 +6,8 @@ class Reservation < ApplicationRecord
   validates :code, :status, :currency, :total_amount, :adults, :end_date, :start_date,
             :guest, :nights, :security_price, :payout_price, presence: true
   validates :code, uniqueness: true
-  validates :adults, numericality: { greater_than_or_equal_to: 0 }
-  validates :total_amount, numericality: { greater_than_or_equal_to: 0 }
+  validates :adults, numericality: { greater_than_or_equal_to: 1 }
+  validates :total_amount, numericality: { greater_than_or_equal_to: 1 }
   validate :duration_validation
   validate :number_of_guest_validation
   validate :number_of_nights_validation
