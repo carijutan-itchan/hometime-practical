@@ -1,21 +1,16 @@
 class ReservationsController < ApplicationController
   include ReservationHelper
 
-  before_action :set_params
+  before_action :build_params
   before_action :check_reservation
 
   def create
-    if @reservation.nil?
-      create_service = CreateReservationService.new(params: @params)
-      reservation = create_service.execute
-    else
-      update_service = UpdateReservationService.new(params: @params, reservation: @reservation)
-      reservation = update_service.execute
-    end
+    service = ReservationService.new(params: @params, reservation: @reservation, guest: @guest)
+    reservation = service.execute
 
     render json: {
       data: ActiveModelSerializers::SerializableResource.new(reservation, serializer: ReservationsSerializer),
-      message: ['Reserved Successfully!'],
+      message: 'Reserved Successfully!',
       status: 200,
       type: 'Success'
     }
