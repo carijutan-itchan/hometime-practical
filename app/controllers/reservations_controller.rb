@@ -1,9 +1,10 @@
 class ReservationsController < ApplicationController
   include ReservationHelper
-
+  
   before_action :build_params
   before_action :check_reservation
-
+  before_action :check_guest
+  
   def create
     service = ReservationService.new(params: @params, reservation: @reservation, guest: @guest)
     reservation = service.execute

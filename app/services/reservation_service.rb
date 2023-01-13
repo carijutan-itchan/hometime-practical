@@ -7,12 +7,15 @@ class ReservationService
 
   def execute
     ActiveRecord::Base.transaction do
-      if @guest
-        update_guest
-        update_reservation
-      else
+      if @guest.nil?
         create_guest
         create_reservation
+      elsif @guest && @reservation.nil?
+        update_guest
+        create_reservation
+      else
+        update_guest
+        update_reservation
       end
     end
     
@@ -30,13 +33,14 @@ class ReservationService
   end
 
   def update_reservation
-    @reservation = @guest.reservation&.find(@reservation.id)
-    @reservation.attributes = host_params
+    reservation = @guest.reservations&.find(@reservation.id)
+    reservation.attributes = host_update_params
     reservation.save!
+    @reservation = reservation
   end
 
   def update_guest
-    @guest = @guest.attributes = guest_params
+    @guest.attributes = guest_params
     @guest.save!
   end
 
@@ -66,6 +70,23 @@ class ReservationService
       last_name: params[:guest][:last_name], 
       email: params[:guest][:email], 
       contact: params[:guest][:contact]
+    }
+  end
+
+  def host_update_params
+    {
+      start_date: params[:start_date], 
+      end_date: params[:end_date],
+      adults: params[:adults],
+      children: params[:children],
+      infants: params[:infants],
+      status: params[:status],
+      currency: params[:currency],
+      payout_price: params[:payout_price], 
+      security_price: params[:security_price], 
+      total_amount: params[:total_amount], 
+      nights: params[:nights], 
+      guests: params[:guests]
     }
   end
 

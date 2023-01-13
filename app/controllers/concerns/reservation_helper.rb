@@ -13,14 +13,14 @@ module ReservationHelper
                 currency: set_currency_params,
                 payout_price: set_payout_price_params,
                 security_price: set_security_price_params,
-                total_price: set_total_price_params,
+                total_amount: set_total_price_params,
                 nights: set_nights_params,
                 guests: set_guests_params,
                 guest: {
                   first_name: set_first_name_params,
                   last_name: set_last_name_params,
                   email: set_email_params,
-                  phone: set_phone_params
+                  contact: set_phone_params
                 }
 
     }
@@ -31,13 +31,15 @@ module ReservationHelper
   end
 
   def check_guest
-    @guest = Guest.find_by(email: guest_params[:email])
+    @guest = Guest.find_by(email: set_email_params)
   end
 
   private
 
   def set_code_params
-    params["reservation_code"] || params["reservation"]["code"]
+    if @reservation.nil?
+      params["reservation_code"] || params["reservation"]["code"]
+    end
   end
 
   def set_adults_params
@@ -105,10 +107,12 @@ module ReservationHelper
   end
 
   def set_email_params
-    if params["guest"].nil?
-      params["reservation"]["guest_email"]
-    else
-      params["guest"]["email"]
+    if @guest.nil?
+      if params["guest"].nil?
+        params["reservation"]["guest_email"]
+      else
+        params["guest"]["email"]
+      end
     end
   end
 
